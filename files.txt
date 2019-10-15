@@ -1,0 +1,88 @@
+ 
+rm(list = ls())
+
+
+# Install required packages as needed
+if (!require("psych")) { install.packages("psych")
+  require("psych") }
+
+
+# turn off scientific notation
+options(scipen = 999)
+
+
+# Import your dataset
+dataSet <- read.csv("OnTimeAirport2017Dec.csv")
+
+
+
+
+
+sink("descriptivesOutput.txt", append=FALSE, split=TRUE)
+
+cat("\n###### Let's get started with some fun statistics in RStudio! ######\n")
+
+
+cat("\n###### Summary statistics for dataset: ", "vgsales.csv", "using the summary() function: ######\n")
+summary(dataSet$FlightNum)
+
+
+cat("\n###### Summary statistics using the describe() function: ######\n")
+describe(dataSet$FlightNum)
+
+
+cat("\n###### Summary statistics split by variable 'Platform' using the describeBy() function: ######\n")
+describeBy(dataSet$FlightNum,dataSet$Dest)
+
+cat("\n###### Summary statistics for dataset: ", "vgsales.csv", "using the summary() function: ######\n")
+summary(dataSet$ArrDelay)
+
+cat("\n###### Summary statistics split by variable 'Platform' using the describeBy() function: ######\n")
+describeBy(dataSet$ArrDelay,dataSet$UniqueCarrier)
+
+cat("\n###### Which platform is better for video games, PSP or PC? ######\n")
+
+
+cat("\n###### Create a subset with only two platforms: PSP and PC... ######\n")
+subset <- dataSet[ which(dataSet$UniqueCarrier=='AA' |  dataSet$UniqueCarrier=='UA'), ]
+
+
+cat("\n###### Performing a t-test: ######\n")
+t.test(subset$ArrDelay~subset$UniqueCarrier)
+
+
+cat("\n###### Summary statistics split by variable 'Platform' using the describeBy() function: ######\n")
+describeBy(dataSet$Distance,dataSet$UniqueCarrier)
+
+
+cat("\n###### Summary statistics split by variable 'Platform' using the describeBy() function: ######\n")
+describeBy(dataSet$TaxiOut,dataSet$Origin)
+
+
+cat("\n###### Create a subset with only two platforms: PSP and PC... ######\n")
+subset <- dataSet[ which(dataSet$Origin=='EWR' |  dataSet$Origin=='PHL'), ]
+
+
+cat("\n###### Performing a t-test: ######\n")
+t.test(subset$TaxiOut~subset$Origin)
+
+
+
+
+# This stops R from writing any more to the text output file.
+sink()
+
+
+hist(dataSet$ArrDelay, breaks=40, col="lightgrey", xlab="ArrDelay", main="Histogram of Flight Arrival Delays")
+
+
+pdf("histogram.pdf")
+hist(dataSet$ArrDelay, breaks=40, col="lightgrey", xlab="ArrDelay", main="Histogram of Flight Arrival Delays")
+dev.off()
+
+
+
+
+
+
+
